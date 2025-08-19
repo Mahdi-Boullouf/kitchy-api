@@ -24,10 +24,6 @@ Route::prefix('auth')->group(function(){
 // Public product endpoints (GET one/all)
 Route::get('products', [ProductController::class, 'index']);
 Route::get('products/{product}', [ProductController::class, 'show']);
-
-// Admin-protected product CRUD
-Route::middleware('auth:sanctum')->group(function(){
-
 Route::apiResource('colors', ColorController::class);
     Route::post('products', [ProductController::class, 'store']);
     Route::put('products/{product}', [ProductController::class, 'update']);
@@ -36,12 +32,20 @@ Route::apiResource('colors', ColorController::class);
 
     // Orders management
     Route::get('orders', [OrderController::class, 'index']);
+// Public create order (customers can place orders without auth)
+Route::post('orders', [OrderController::class, 'store']);
+
     Route::get('orders/{order}', [OrderController::class, 'show']);
     Route::put('orders/{order}', [OrderController::class, 'update']);
     Route::delete('orders/{order}', [OrderController::class, 'destroy']);
+    Route::get('clearorders', [OrderController::class, 'clear']);
+
+// Admin-protected product CRUD
+Route::middleware('auth:sanctum')->group(function(){
+
+
 });
 
-// Public create order (customers can place orders without auth)
-Route::post('orders', [OrderController::class, 'store']);
+
 
 ?>
